@@ -26,7 +26,7 @@ header{background:#fff;border-bottom:1px solid var(--line)}.head{min-height:82px
 .lightbox-stage{position:relative;width:100%;border-radius:14px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;min-height:300px}
 .lightbox-stage > img{width:100%;max-height:65vh;object-fit:contain;display:block;user-select:none}
 .spin-wrap{display:none;width:100%;aspect-ratio:1;max-height:65vh;position:relative;background:#fff;touch-action:none;cursor:grab;user-select:none;overflow:hidden}.spin-wrap.active{display:block}.spin-wrap:active{cursor:grabbing}
-.spin-frame{width:100%;height:100%;background-repeat:no-repeat;background-size:200% 200%;background-color:#fff;transition:background-position .18s ease}
+.spin-frame{width:100%;height:100%;background-repeat:no-repeat;background-size:200% 200%;background-color:#fff;transition:transform .28s cubic-bezier(.22,1,.36,1),opacity .2s ease;will-change:transform,opacity}
 .spin-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(31,26,24,.85);color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px;pointer-events:none;white-space:nowrap;z-index:2}
 .spin-nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.94);color:var(--ink);font-size:18px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);z-index:3}.spin-nav.prev{right:10px}.spin-nav.next{left:10px}
 
@@ -174,12 +174,20 @@ const box = document.getElementById('lightbox'),
 
 let angles = [], stepIdx = 0, dragging = false, startX = 0;
 
-function showStep(i) {
+function showStep(i, dir = 1) {
   if (!angles.length) return;
   stepIdx = ((i % 4) + 4) % 4;
   const col = stepIdx % 2;
   const row = Math.floor(stepIdx / 2);
-  spinFrame.style.backgroundPosition = `${col * 100}% ${row * 100}%`;
+  spinFrame.style.opacity = '0.35';
+  spinFrame.style.transform = `scale(1.04) translateX(${dir * 18}px)`;
+  requestAnimationFrame(() => {
+    spinFrame.style.backgroundPosition = `${col * 100}% ${row * 100}%`;
+    setTimeout(() => {
+      spinFrame.style.opacity = '1';
+      spinFrame.style.transform = 'scale(1.04) translateX(0)';
+    }, 55);
+  });
   spinHint.textContent = `اسحب يمين وشمال للتدوير (${stepIdx + 1} / 4)`;
 }
 
@@ -195,14 +203,14 @@ function show3dMode() {
   tabColors.classList.remove('active');
   big.style.display = 'none';
   spinWrap.classList.add('active');
-  showStep(stepIdx);
+  showStep(stepIdx, 0);
 }
 
 tabColors.addEventListener('click', showColorsMode);
 tab3d.addEventListener('click', show3dMode);
 
-prevBtn.addEventListener('click', e => { e.stopPropagation(); showStep(stepIdx - 1); });
-nextBtn.addEventListener('click', e => { e.stopPropagation(); showStep(stepIdx + 1); });
+prevBtn.addEventListener('click', e => { e.stopPropagation(); showStep(stepIdx - 1, -1); });
+nextBtn.addEventListener('click', e => { e.stopPropagation(); showStep(stepIdx + 1, 1); });
 
 spinWrap.addEventListener('pointerdown', e => {
   if (e.target.closest('.spin-nav')) return;
@@ -213,8 +221,9 @@ spinWrap.addEventListener('pointerdown', e => {
 spinWrap.addEventListener('pointermove', e => {
   if (!dragging) return;
   const dx = e.clientX - startX;
-  if (Math.abs(dx) >= 28) {
-    showStep(stepIdx + (dx > 0 ? 1 : -1));
+  if (Math.abs(dx) >= 32) {
+    const dir = dx > 0 ? 1 : -1;
+    showStep(stepIdx + dir, dir);
     startX = e.clientX;
   }
 });
@@ -232,7 +241,7 @@ document.querySelectorAll('.photo').forEach(btn => btn.addEventListener('click',
     stepIdx = 0;
     tabs.classList.add('show');
     spinFrame.style.backgroundImage = `url('${angles[0]}')`;
-    showStep(0);
+    showStep(0, 0);
   } else {
     angles = [];
     tabs.classList.remove('show');
