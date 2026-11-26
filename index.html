@@ -26,7 +26,7 @@ header{background:#fff;border-bottom:1px solid var(--line)}.head{min-height:82px
 .lightbox-stage{position:relative;width:100%;border-radius:14px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;min-height:300px}
 .lightbox-stage > img{width:100%;max-height:65vh;object-fit:contain;display:block;user-select:none}
 .spin-wrap{display:none;width:100%;aspect-ratio:1;max-height:65vh;position:relative;background:#fff;touch-action:none;cursor:grab;user-select:none;overflow:hidden}.spin-wrap.active{display:block}.spin-wrap:active{cursor:grabbing}
-.spin-frame{width:100%;height:100%;background-repeat:no-repeat;background-size:300% 300%;background-color:#fff;transform:scale(1.05);transform-origin:center;transition:background-position .15s ease}
+.spin-motion{width:100%;height:100%;background-repeat:no-repeat;background-size:300% 300%;background-color:#fff;transform-origin:center;transition:transform .08s linear,background-position .22s cubic-bezier(.22,1,.36,1);will-change:transform,background-position}
 .spin-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(31,26,24,.85);color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px;pointer-events:none;white-space:nowrap;z-index:2}
 .spin-nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.94);color:var(--ink);font-size:18px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);z-index:3}.spin-nav.prev{right:10px}.spin-nav.next{left:10px}
 
@@ -61,10 +61,10 @@ header{background:#fff;border-bottom:1px solid var(--line)}.head{min-height:82px
     <div class="lightbox-stage">
       <img id="lightbox-img" alt="">
       <div class="spin-wrap" id="spin-wrap">
-        <div class="spin-frame" id="spin-frame"></div>
+        <div class="spin-motion" id="spin-motion"></div>
         <button type="button" class="spin-nav prev" id="spin-prev" aria-label="السابق">❮</button>
         <button type="button" class="spin-nav next" id="spin-next" aria-label="التالي">❯</button>
-        <span class="spin-hint" id="spin-hint">اسحب يمين وشمال للتدوير (1 / 9)</span>
+        <span class="spin-hint" id="spin-hint">اسحب للتحريك والتدوير (1 / 9)</span>
       </div>
     </div>
     <a id="lightbox-order" class="order" target="_blank" rel="noopener">اطلب عبر واتساب</a>
@@ -167,20 +167,26 @@ const box = document.getElementById('lightbox'),
       tabColors = document.getElementById('tab-colors'),
       tab3d = document.getElementById('tab-3d'),
       spinWrap = document.getElementById('spin-wrap'),
-      spinFrame = document.getElementById('spin-frame'),
+      spinMotion = document.getElementById('spin-motion'),
       spinHint = document.getElementById('spin-hint'),
       prevBtn = document.getElementById('spin-prev'),
       nextBtn = document.getElementById('spin-next');
 
-let angles = [], stepIdx = 0, dragging = false, startX = 0;
+let angles = [], stepIdx = 0, dragging = false, startX = 0, dragOffset = 0;
+
+function applyMotionTransform() {
+  const clamped = Math.max(-28, Math.min(28, dragOffset * 0.22));
+  const tilt = Math.max(-7, Math.min(7, dragOffset * 0.06));
+  spinMotion.style.transform = `scale(1.06) translateX(${clamped}px) rotateY(${tilt}deg)`;
+}
 
 function showStep(i) {
   if (!angles.length) return;
   stepIdx = ((i % 9) + 9) % 9;
   const col = stepIdx % 3;
   const row = Math.floor(stepIdx / 3);
-  spinFrame.style.backgroundPosition = `${col * 50}% ${row * 50}%`;
-  spinHint.textContent = `اسحب يمين وشمال للتدوير (${stepIdx + 1} / 9)`;
+  spinMotion.style.backgroundPosition = `${col * 50}% ${row * 50}%`;
+  spinHint.textContent = `اسحب للتحريك والتدوير (${stepIdx + 1} / 9)`;
 }
 
 function showColorsMode() {
@@ -195,31 +201,59 @@ function show3dMode() {
   tabColors.classList.remove('active');
   big.style.display = 'none';
   spinWrap.classList.add('active');
+  dragOffset = 0;
+  applyMotionTransform();
   showStep(stepIdx);
 }
 
 tabColors.addEventListener('click', showColorsMode);
 tab3d.addEventListener('click', show3dMode);
 
-prevBtn.addEventListener('click', e => { e.stopPropagation(); showStep(stepIdx - 1); });
-nextBtn.addEventListener('click', e => { e.stopPropagation(); showStep(stepIdx + 1); });
+prevBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  dragOffset = -18;
+  applyMotionTransform();
+  showStep(stepIdx - 1);
+  setTimeout(() => { dragOffset = 0; applyMotionTransform(); }, 160);
+});
+
+nextBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  dragOffset = 18;
+  applyMotionTransform();
+  showStep(stepIdx + 1);
+  setTimeout(() => { dragOffset = 0; applyMotionTransform(); }, 160);
+});
 
 spinWrap.addEventListener('pointerdown', e => {
   if (e.target.closest('.spin-nav')) return;
   dragging = true;
   startX = e.clientX;
+  dragOffset = 0;
   spinWrap.setPointerCapture(e.pointerId);
 });
+
 spinWrap.addEventListener('pointermove', e => {
   if (!dragging) return;
   const dx = e.clientX - startX;
-  if (Math.abs(dx) >= 24) {
+  dragOffset = dx;
+  applyMotionTransform();
+  if (Math.abs(dx) >= 36) {
     showStep(stepIdx + (dx > 0 ? 1 : -1));
     startX = e.clientX;
+    dragOffset = 0;
   }
 });
-spinWrap.addEventListener('pointerup', () => { dragging = false; });
-spinWrap.addEventListener('pointercancel', () => { dragging = false; });
+
+function endDrag() {
+  if (!dragging) return;
+  dragging = false;
+  dragOffset = 0;
+  applyMotionTransform();
+}
+
+spinWrap.addEventListener('pointerup', endDrag);
+spinWrap.addEventListener('pointercancel', endDrag);
 
 document.querySelectorAll('.photo').forEach(btn => btn.addEventListener('click', () => {
   const src = btn.dataset.full, extra = btn.dataset.extra, name = btn.dataset.name;
@@ -230,13 +264,15 @@ document.querySelectorAll('.photo').forEach(btn => btn.addEventListener('click',
   if (extra) {
     angles = extra.split(',').map(s => s.trim()).filter(Boolean);
     stepIdx = 0;
+    dragOffset = 0;
     tabs.classList.add('show');
-    spinFrame.style.backgroundImage = `url('${angles[0]}')`;
+    spinMotion.style.backgroundImage = `url('${angles[0]}')`;
+    applyMotionTransform();
     showStep(0);
   } else {
     angles = [];
     tabs.classList.remove('show');
-    spinFrame.style.backgroundImage = '';
+    spinMotion.style.backgroundImage = '';
   }
 
   box.classList.add('open'); document.body.style.overflow = 'hidden';
