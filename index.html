@@ -26,7 +26,7 @@ header{background:#fff;border-bottom:1px solid var(--line)}.head{min-height:82px
 .lightbox-stage{position:relative;width:100%;border-radius:14px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;min-height:300px}
 .lightbox-stage > img{width:100%;max-height:65vh;object-fit:contain;display:block;user-select:none}
 .spin-wrap{display:none;width:100%;aspect-ratio:1;max-height:65vh;position:relative;background:#fff;touch-action:none;cursor:grab;user-select:none;overflow:hidden}.spin-wrap.active{display:block}.spin-wrap:active{cursor:grabbing}
-.spin-frame{width:100%;height:100%;background-repeat:no-repeat;background-size:200% 200%;background-color:#fff;transition:transform .28s cubic-bezier(.22,1,.36,1),opacity .2s ease;will-change:transform,opacity}
+.spin-frame{width:100%;height:100%;background-repeat:no-repeat;background-size:400% 100%;background-color:#fff;transition:background-position .16s ease}
 .spin-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(31,26,24,.85);color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px;pointer-events:none;white-space:nowrap;z-index:2}
 .spin-nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.94);color:var(--ink);font-size:18px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);z-index:3}.spin-nav.prev{right:10px}.spin-nav.next{left:10px}
 
@@ -74,7 +74,7 @@ header{background:#fff;border-bottom:1px solid var(--line)}.head{min-height:82px
 <script>
 const PRODUCTS = `
 winter | 73e7e348f7f8742cc930d0cb4af87860.jpg | بوط شتوي بدون كعب بإبزيم عريض
-winter | e89185740371a6edf6b5767fa298ea95.jpg, 1795720178047.jpg | بوط شتوي بدون كعب بشعار B
+winter | 302849324_bota_cream_sprite.jpg | بوط شتوي بدون كعب بشعار B
 winter | 9b51766b5f4a6145811a93eb51d28444.jpg | بوط شتوي كعب متوسط بحزام رفيع
 winter | b94b2bb2a2952f385d84c281c5c2945d.jpg | بوط شتوي كعب متوسط برباط
 winter | 9782310bb53f080909802b8684a2ff19.jpg | بوط شتوي كعب متوسط بسحاب جانبي
@@ -177,17 +177,8 @@ let angles = [], stepIdx = 0, dragging = false, startX = 0;
 function showStep(i, dir = 1) {
   if (!angles.length) return;
   stepIdx = ((i % 4) + 4) % 4;
-  const col = stepIdx % 2;
-  const row = Math.floor(stepIdx / 2);
-  spinFrame.style.opacity = '0.35';
-  spinFrame.style.transform = `scale(1.04) translateX(${dir * 18}px)`;
-  requestAnimationFrame(() => {
-    spinFrame.style.backgroundPosition = `${col * 100}% ${row * 100}%`;
-    setTimeout(() => {
-      spinFrame.style.opacity = '1';
-      spinFrame.style.transform = 'scale(1.04) translateX(0)';
-    }, 55);
-  });
+  const col = stepIdx % 4;
+  spinFrame.style.backgroundPosition = `${col * 33.3333333}% 0%`;
   spinHint.textContent = `اسحب يمين وشمال للتدوير (${stepIdx + 1} / 4)`;
 }
 
@@ -202,8 +193,11 @@ function show3dMode() {
   tab3d.classList.add('active');
   tabColors.classList.remove('active');
   big.style.display = 'none';
-  spinWrap.classList.add('active');
-  showStep(stepIdx, 0);
+  spinWrap.classList.add('action');
+  requestAnimationFrame(() => {
+    spinWrap.classList.add('active');
+    showStep(stepIdx, 0);
+  });
 }
 
 tabColors.addEventListener('click', showColorsMode);
@@ -240,7 +234,7 @@ document.querySelectorAll('.photo').forEach(btn => btn.addEventListener('click',
     angles = extra.split(',').map(s => s.trim()).filter(Boolean);
     stepIdx = 0;
     tabs.classList.add('show');
-    spinFrame.style.backgroundImage = `url('${angles[0]}')`;
+    spinFrame.style.backgroundImage = `url('assets/${angles[0]}')`;
     showStep(0, 0);
   } else {
     angles = [];
@@ -251,7 +245,7 @@ document.querySelectorAll('.photo').forEach(btn => btn.addEventListener('click',
   box.classList.add('open'); document.body.style.overflow = 'hidden';
 }));
 
-function closeBox() { box.classList.remove('open'); document.body.style.overflow = ''; big.src = ''; }
+function closeBox() { box.classList.remove('open'); document.body.style.overflow = ''; big.src = ''; spinWrap.classList.remove('active'); }
 box.querySelector('.close').addEventListener('click', closeBox);
 box.addEventListener('click', e => { if (e.target === box) closeBox(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBox(); });
