@@ -25,10 +25,11 @@ header{background:#fff;border-bottom:1px solid var(--line)}.head{min-height:82px
 .view-tabs{display:none;gap:8px;justify-content:center}.view-tabs.show{display:flex}.tab-btn{flex:1;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;font-weight:700;font-size:14px;cursor:pointer;transition:.2s}.tab-btn.active{background:#fff;color:var(--ink);border-color:#fff}
 .lightbox-stage{position:relative;width:100%;border-radius:14px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center}
 .lightbox img#lightbox-img{width:100%;max-height:62vh;object-fit:contain;display:block}
-.viewer-3d{display:none;width:100%;aspect-ratio:1;max-height:62vh;position:relative;background:#fff;touch-action:pan-y;cursor:grab;user-select:none}.viewer-3d.active{display:block}.viewer-3d:active{cursor:grabbing}
-.viewer-3d canvas{width:100%;height:100%;display:block;object-fit:contain}
+.viewer-3d{display:none;width:100%;aspect-ratio:1;max-height:62vh;position:relative;background:#fff;touch-action:none;cursor:grab;user-select:none;overflow:hidden}.viewer-3d.active{display:block}.viewer-3d:active{cursor:grabbing}
+.viewer-3d-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;transition:transform .08s ease-out;will-change:transform}
+.viewer-3d-inner img{width:100%;height:100%;object-fit:contain;pointer-events:none;display:block}
 .spin-hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(31,26,24,.78);color:#fff;font-size:12px;font-weight:700;padding:5px 14px;border-radius:999px;pointer-events:none;white-space:nowrap}
-.spin-nav{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.92);color:var(--ink);font-size:18px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12)}.spin-nav.prev{right:10px}.spin-nav.next{left:10px}
+.spin-nav{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.92);color:var(--ink);font-size:18px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12);z-index:2}.spin-nav.prev{right:10px}.spin-nav.next{left:10px}
 
 @media(max-width:760px){.hero{grid-template-columns:1fr;gap:26px;padding-block:34px}.hero-img{max-height:420px}.steps{grid-template-columns:1fr}.contact-inner{align-items:flex-start;flex-direction:column}.wrap{padding-inline:16px}.sections,.how{padding-block:38px}}
 @media(max-width:390px){.product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.head .order{padding-inline:14px;font-size:13px}.logo{height:48px;max-width:140px}}
@@ -61,7 +62,9 @@ header{background:#fff;border-bottom:1px solid var(--line)}.head{min-height:82px
     <div class="lightbox-stage">
       <img id="lightbox-img" alt="">
       <div class="viewer-3d" id="viewer-3d">
-        <canvas id="canvas-3d"></canvas>
+        <div class="viewer-3d-inner" id="viewer-3d-inner">
+          <img id="img-3d" alt="">
+        </div>
         <button type="button" class="spin-nav prev" id="spin-prev" aria-label="السابق">❮</button>
         <button type="button" class="spin-nav next" id="spin-next" aria-label="التالي">❯</button>
         <span class="spin-hint">اسحب يمين وشمال للتدوير 360°</span>
@@ -166,23 +169,13 @@ const box = document.getElementById('lightbox'),
       tabColors = document.getElementById('tab-colors'),
       tab3d = document.getElementById('tab-3d'),
       viewer3d = document.getElementById('viewer-3d'),
-      canvas = document.getElementById('canvas-3d'),
-      ctx = canvas.getContext('2d');
+      viewer3dInner = document.getElementById('viewer-3d-inner'),
+      img3d = document.getElementById('img-3d');
 
-let spriteImg = null, frameIdx = 0, dragging = false, startX = 0;
+let rotY = 0, rotX = 0, dragging = false, startX = 0, startY = 0;
 
-function drawFrame(idx) {
-  if (!spriteImg || !spriteImg.complete || !spriteImg.naturalWidth) return;
-  const cols = 3, rows = 3;
-  const fw = spriteImg.naturalWidth / cols;
-  const fh = spriteImg.naturalHeight / rows;
-  const col = idx % cols;
-  const row = Math.floor(idx / cols);
-  canvas.width = fw;
-  canvas.height = fh;
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, fw, fh);
-  ctx.drawImage(spriteImg, col * fw, row * fh, fw, fh, 0, 0, fw, fh);
+function updateTransform() {
+  viewer3dInner.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.04)`;
 }
 
 function showColorsMode() {
@@ -197,7 +190,9 @@ function show3dMode() {
   tabColors.classList.remove('active');
   big.style.display = 'none';
   viewer3d.classList.add('active');
-  drawFrame(frameIdx);
+  rotY = 0;
+  rotX = 0;
+  updateTransform();
 }
 
 tabColors.addEventListener('click', showColorsMode);
@@ -205,30 +200,32 @@ tab3d.addEventListener('click', show3dMode);
 
 document.getElementById('spin-prev').addEventListener('click', e => {
   e.stopPropagation();
-  frameIdx = (frameIdx + 8) % 9;
-  drawFrame(frameIdx);
+  rotY -= 35;
+  updateTransform();
 });
 document.getElementById('spin-next').addEventListener('click', e => {
   e.stopPropagation();
-  frameIdx = (frameIdx + 1) % 9;
-  drawFrame(frameIdx);
+  rotY += 35;
+  updateTransform();
 });
 
 viewer3d.addEventListener('pointerdown', e => {
   if (e.target.closest('.spin-nav')) return;
   dragging = true;
   startX = e.clientX;
+  startY = e.clientY;
   viewer3d.setPointerCapture(e.pointerId);
 });
 viewer3d.addEventListener('pointermove', e => {
   if (!dragging) return;
   const dx = e.clientX - startX;
-  if (Math.abs(dx) >= 24) {
-    const step = dx > 0 ? 1 : -1;
-    frameIdx = (frameIdx + step + 9) % 9;
-    drawFrame(frameIdx);
-    startX = e.clientX;
-  }
+  const dy = e.clientY - startY;
+  rotY += dx * 0.45;
+  rotX -= dy * 0.25;
+  rotX = Math.max(-22, Math.min(22, rotX));
+  startX = e.clientX;
+  startY = e.clientY;
+  updateTransform();
 });
 viewer3d.addEventListener('pointerup', () => { dragging = false; });
 viewer3d.addEventListener('pointercancel', () => { dragging = false; });
@@ -241,13 +238,13 @@ document.querySelectorAll('.photo').forEach(btn => btn.addEventListener('click',
   showColorsMode();
   if (spin) {
     tabs.classList.add('show');
-    frameIdx = 0;
-    spriteImg = new Image();
-    spriteImg.onload = () => { if (viewer3d.classList.contains('active')) drawFrame(frameIdx); };
-    spriteImg.src = spin;
+    img3d.src = spin;
+    img3d.alt = name + ' - 3D';
+    rotY = 0; rotX = 0;
+    updateTransform();
   } else {
     tabs.classList.remove('show');
-    spriteImg = null;
+    img3d.src = '';
   }
 
   box.classList.add('open'); document.body.style.overflow = 'hidden';
