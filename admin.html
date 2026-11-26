@@ -43,10 +43,14 @@ input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:
       <option value="tall">بوط طويل</option>
       <option value="slippers">بوابيج طبي</option>
       <option value="bags">الشنط</option>
+      <option value="boys">ولادي</option>
+      <option value="girls">بناتي</option>
+      <option value="women_heels">أحذية نسائي كعب</option>
+      <option value="women_shoes">أحذية نسائي</option>
     </select>
 
     <label>2. اسم الموديل (الذي سيراه الزبائن)</label>
-    <input type="text" id="prod-name" placeholder="مثال: شنتة كتف جلد أسود">
+    <input type="text" id="prod-name" placeholder="مثال: حذاء نسائي كعب عالي">
 
     <label>3. اختر الصورة من الاستوديو</label>
     <input type="file" id="photo" accept="image/*">
@@ -64,7 +68,17 @@ input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:
 
 <script>
 const OWNER = 'alsindbad', REPO = 'alsindbad-store', FILE = 'index.html';
-const CAT_NAMES = {winter:'بوط شتوي', heels:'بوط كعب', tall:'بوط طويل', slippers:'بابوج طبي', bags:'شنطة'};
+const CAT_NAMES = {
+  winter:'بوط شتوي',
+  heels:'بوط كعب',
+  tall:'بوط طويل',
+  slippers:'بابوج طبي',
+  bags:'شنطة',
+  boys:'ولادي',
+  girls:'بناتي',
+  women_heels:'أحذية نسائي كعب',
+  women_shoes:'أحذية نسائي'
+};
 let token = localStorage.getItem('sindbad_token') || '';
 let currentHtml = '', currentSha = '', productsList = [];
 
