@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>إدارة متجر السندباد</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--red:#B3201F;--ink:#1F1A18;--cream:#FBF7F4;--line:#E8DCD3}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:'Cairo',sans-serif;padding:16px}
+.box{max-width:480px;margin:auto;background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px}
+h1{font-size:22px;margin:0 0 16px;color:var(--red);text-align:center}
+label{display:block;font-weight:700;margin:12px 0 6px;font-size:14px}
+input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit;background:#fff}
+.btn{width:100%;padding:14px;border:0;border-radius:999px;background:var(--red);color:#fff;font:inherit;font-weight:700;margin-top:18px;cursor:pointer}
+.btn:disabled{opacity:.5}
+.btn-sec{background:var(--ink);margin-top:10px}
+.msg{margin-top:14px;padding:12px;border-radius:12px;font-size:14px;font-weight:600;text-align:center;display:none}
+.ok{background:#e7f7ed;color:#146c38;display:block}
+.err{background:#fdeaea;color:#a61b1b;display:block}
+.list{margin-top:24px;border-top:1px solid var(--line);padding-top:16px}
+.item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.del{background:#fdeaea;color:#a61b1b;border:0;padding:6px 12px;border-radius:8px;font:inherit;font-weight:700;cursor:pointer}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>لوحة تحكم السندباد</h1>
+
+  <div id="login-view">
+    <label>أدخل مفتاح الربط (Token) — يُحفظ في تلفونك</label>
+    <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxx" dir="ltr">
+    <button class="btn" onclick="saveToken()">دخول وحفظ المفتاح</button>
+  </div>
+
+  <div id="app-view" class="hide">
+    <label>1. اختر القسم</label>
+    <select id="cat">
+      <option value="winter">البوط الشتوي</option>
+      <option value="heels">بواط كعب</option>
+      <option value="tall">بوط طويل</option>
+      <option value="slippers">بوابيج طبي</option>
+      <option value="bags">الشنط</option>
+    </select>
+
+    <label>2. اسم الموديل (الذي سيراه الزبائن)</label>
+    <input type="text" id="prod-name" placeholder="مثال: شنتة كتف جلد أسود">
+
+    <label>3. اختر الصورة من الاستوديو</label>
+    <input type="file" id="photo" accept="image/*">
+
+    <button class="btn" id="add-btn" onclick="addProduct()">نشر المنتج في الموقع</button>
+    <div id="status" class="msg"></div>
+
+    <div class="list">
+      <strong>المنتجات الحالية (<span id="count">0</span>)</strong>
+      <div id="items-list"></div>
+    </div>
+    <button class="btn btn-sec" onclick="logout()">تسجيل خروج / تغيير المفتاح</button>
+  </div>
+</div>
+
+<script>
+const OWNER = 'alsindbad', REPO = 'alsindbad-store', FILE = 'index.html';
+const CAT_NAMES = {winter:'بوط شتوي', heels:'بوط كعب', tall:'بوط طويل', slippers:'بابوج طبي', bags:'شنطة'};
+let token = localStorage.getItem('sindbad_token') || '';
+let currentHtml = '', currentSha = '', productsList = [];
+
+function showMsg(text, isErr) {
+  const el = document.getElementById('status');
+  el.textContent = text;
+  el.className = 'msg ' + (isErr ? 'err' : 'ok');
+}
+
+function saveToken() {
+  const val = document.getElementById('token-input').value.trim();
+  if (!val) return;
+  localStorage.setItem('sindbad_token', val);
+  token = val;
+  init();
+}
+
+function logout() {
+  localStorage.removeItem('sindbad_token');
+  location.reload();
+}
+
+async function ghReq(path, method = 'GET', body = null) {
+  const opts = {
+    method,
+    headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`, opts);
+  if (!res.ok) throw new Error('تأكد من صحة المفتاح أو الاتصال بالإنترنت');
+  return res.json();
+}
+
+function b64EncodeUnicode(str) {
+  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode('0x' + p1)));
+}
+
+function b64DecodeUnicode(str) {
+  return decodeURIComponent(Array.prototype.map.call(atob(str), c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+}
+
+async function init() {
+  if (!token) return;
+  document.getElementById('login-view').classList.add('hide');
+  document.getElementById('app-view').classList.remove('hide');
+  showMsg('جاري تحميل المنتجات...', false);
+  try {
+    const data = await ghReq(FILE);
+    currentSha = data.sha;
+    currentHtml = b64DecodeUnicode(data.content.replace(/\n/g, ''));
+    const match = currentHtml.match(/const PRODUCTS = `([\s\S]*?)`;/);
+    if (!match) throw new Error('تنسيق الملف غير مطابق');
+    productsList = match[1].trim().split('\n').map(l => l.trim()).filter(Boolean);
+    renderList();
+    document.getElementById('status').className = 'msg';
+  } catch (e) {
+    showMsg(e.message, true);
+  }
+}
+
+function renderList() {
+  document.getElementById('count').textContent = productsList.length;
+  const container = document.getElementById('items-list');
+  container.innerHTML = '';
+  productsList.forEach((line, idx) => {
+    const [cat, , name] = line.split('|').map(s => s.trim());
+    const div = document.createElement('div');
+    div.className = 'item';
+    div.innerHTML = `<span><b>[${CAT_NAMES[cat]||cat}]</b> ${name}</span><button class="del" onclick="deleteProduct(${idx})">حذف</button>`;
+    container.appendChild(div);
+  });
+}
+
+function compressImage(file) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const max = 1000;
+        let w = img.width, h = img.height;
+        if (w > max || h > max) {
+          if (w > h) { h = Math.round(h * max / w); w = max; }
+          else { w = Math.round(w * max / h); h = max; }
+        }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', 0.85).split(',')[1]);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function addProduct() {
+  const cat = document.getElementById('cat').value;
+  const name = document.getElementById('prod-name').value.trim();
+  const file = document.getElementById('photo').files[0];
+  const btn = document.getElementById('add-btn');
+
+  if (!name || !file) return showMsg('يرجى كتابة اسم الموديل واختيار صورة', true);
+
+  btn.disabled = true;
+  showMsg('جاري ضغط الصورة ورفعها...', false);
+  try {
+    const imgName = 'prod_' + Date.now() + '.jpg';
+    const base64Img = await compressImage(file);
+    await ghReq('assets/' + imgName, 'PUT', { message: 'Add ' + imgName, content: base64Img });
+
+    showMsg('جاري تحديث الموقع...', false);
+    const latest = await ghReq(FILE);
+    currentSha = latest.sha;
+    currentHtml = b64DecodeUnicode(latest.content.replace(/\n/g, ''));
+    const match = currentHtml.match(/const PRODUCTS = `([\s\S]*?)`;/);
+    productsList = match[1].trim().split('\n').map(l => l.trim()).filter(Boolean);
+
+    productsList.push(`${cat} | ${imgName} | ${name}`);
+    const newBlock = 'const PRODUCTS = `\n' + productsList.join('\n') + '\n`;';
+    const updatedHtml = currentHtml.replace(/const PRODUCTS = `[\s\S]*?`;/, newBlock);
+
+    const res = await ghReq(FILE, 'PUT', {
+      message: 'Add product: ' + name,
+      content: b64EncodeUnicode(updatedHtml),
+      sha: currentSha
+    });
+    currentSha = res.content.sha;
+    document.getElementById('prod-name').value = '';
+    document.getElementById('photo').value = '';
+    renderList();
+    showMsg('تم النشر بنجاح! سيظهر في الموقع خلال 20 ثانية.', false);
+  } catch (e) {
+    showMsg('حدث خطأ: ' + e.message, true);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function deleteProduct(idx) {
+  if (!confirm('متأكد من حذف هذا المنتج من الموقع؟')) return;
+  showMsg('جاري الحذف...', false);
+  try {
+    const latest = await ghReq(FILE);
+    currentSha = latest.sha;
+    currentHtml = b64DecodeUnicode(latest.content.replace(/\n/g, ''));
+    const match = currentHtml.match(/const PRODUCTS = `([\s\S]*?)`;/);
+    productsList = match[1].trim().split('\n').map(l => l.trim()).filter(Boolean);
+
+    productsList.splice(idx, 1);
+    const newBlock = 'const PRODUCTS = `\n' + productsList.join('\n') + '\n`;';
+    const updatedHtml = currentHtml.replace(/const PRODUCTS = `[\s\S]*?`;/, newBlock);
+
+    const res = await ghReq(FILE, 'PUT', {
+      message: 'Remove product',
+      content: b64EncodeUnicode(updatedHtml),
+      sha: currentSha
+    });
+    currentSha = res.content.sha;
+    renderList();
+    showMsg('تم حذف المنتج بنجاح.', false);
+  } catch (e) {
+    showMsg('حدث خطأ: ' + e.message, true);
+  }
+}
+
+if (token) init();
+</script>
+</body>
+</html>
