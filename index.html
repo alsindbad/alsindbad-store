@@ -16,9 +16,20 @@
 header{background:#fff;border-bottom:1px solid var(--line)}.head{min-height:82px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}.logo{height:56px;max-width:180px;object-fit:contain}
 .order{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:9px 24px;border-radius:999px;background:var(--red);color:#fff;font-weight:700;transition:.2s}.order:hover{filter:brightness(.92);transform:translateY(-1px)}
 .hero{display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:42px;padding-block:54px}.eyebrow{color:var(--red);font-weight:700;font-size:14px}h1{font-size:clamp(34px,5vw,52px);line-height:1.25;margin:12px 0 18px;font-weight:800}.intro{font-size:18px;color:var(--muted);max-width:540px;margin:0}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}.secondary{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:8px 24px;border:2px solid var(--ink);border-radius:999px;color:var(--ink);font-weight:700}.hero-img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:28px;display:block}
-.products-area{background:#fff;border-block:1px solid var(--line)}.sections{padding-block:52px}.section-head{margin:0 0 22px}h2{font-size:clamp(27px,4vw,34px);margin:0;font-weight:800}.section-head p{color:var(--muted);margin:5px 0 0}.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));gap:16px}.product{display:flex;flex-direction:column;min-width:0;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:var(--cream)}.photo{display:block;width:100%;padding:0;border:0;background:transparent;cursor:zoom-in}.photo img{width:100%;aspect-ratio:1;object-fit:cover;display:block;transition:transform .25s}.photo:hover img{transform:scale(1.025)}.product-info{display:flex;flex:1;flex-direction:column;gap:12px;padding:12px}.product h3{font-size:15px;line-height:1.5;margin:0;flex:1;font-weight:700}.small{background:var(--ink);font-size:14px;min-height:42px;padding:7px 12px}.subsection{margin-top:42px}.how{padding-block:52px}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}.step{background:var(--soft);padding:22px;border-radius:18px}.step b{display:block;font-size:28px;color:var(--red);line-height:1.2}.step strong{display:block;font-size:19px;margin-top:8px}.step p{margin:4px 0 0;color:var(--muted);font-size:14px}
+.products-area{background:#fff;border-block:1px solid var(--line)}.sections{padding-block:52px}.section-head{margin:0 0 22px}h2{font-size:clamp(27px,4vw,34px);margin:0;font-weight:800}.section-head p{color:var(--muted);margin:5px 0 0}.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));gap:16px}.product{display:flex;flex-direction:column;min-width:0;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:var(--cream)}.photo{position:relative;display:block;width:100%;padding:0;border:0;background:transparent;cursor:zoom-in}.photo img{width:100%;aspect-ratio:1;object-fit:cover;display:block;transition:transform .25s}.photo:hover img{transform:scale(1.025)}
+.badge-3d{position:absolute;top:10px;left:10px;background:var(--red);color:#fff;font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;box-shadow:0 3px 8px rgba(0,0,0,.25);letter-spacing:.3px;pointer-events:none}
+.product-info{display:flex;flex:1;flex-direction:column;gap:12px;padding:12px}.product h3{font-size:15px;line-height:1.5;margin:0;flex:1;font-weight:700}.small{background:var(--ink);font-size:14px;min-height:42px;padding:7px 12px}.subsection{margin-top:42px}.how{padding-block:52px}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}.step{background:var(--soft);padding:22px;border-radius:18px}.step b{display:block;font-size:28px;color:var(--red);line-height:1.2}.step strong{display:block;font-size:19px;margin-top:8px}.step p{margin:4px 0 0;color:var(--muted);font-size:14px}
 .contact{background:var(--red);color:white}.contact-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-block:42px}.contact h2{margin-bottom:8px}.contact p{margin:3px 0}.contact-links{display:flex;flex-wrap:wrap;gap:10px}.contact-links a{display:inline-flex;align-items:center;justify-content:center;padding:9px 18px;min-height:44px;border:1px solid #fff;border-radius:999px;color:#fff;font-weight:700}.contact-links a:first-child{background:#fff;color:#8E1816}footer{padding:16px;text-align:center;font-size:13px;color:var(--muted)}
-.lightbox{position:fixed;inset:0;background:#140e0ee8;z-index:10;display:none;align-items:center;justify-content:center;padding:16px}.lightbox.open{display:flex}.lightbox-inner{width:min(640px,100%);display:flex;flex-direction:column;gap:12px}.lightbox-top{display:flex;align-items:center;justify-content:space-between;color:#fff;gap:12px}.close{width:44px;height:44px;border:0;border-radius:50%;font-size:26px;background:#fff;cursor:pointer}.lightbox img{width:100%;max-height:68vh;object-fit:contain;border-radius:14px;background:#fff}
+
+.lightbox{position:fixed;inset:0;background:#140e0ee8;z-index:10;display:none;align-items:center;justify-content:center;padding:16px}.lightbox.open{display:flex}.lightbox-inner{width:min(540px,100%);display:flex;flex-direction:column;gap:12px}.lightbox-top{display:flex;align-items:center;justify-content:space-between;color:#fff;gap:12px}.close{width:44px;height:44px;border:0;border-radius:50%;font-size:26px;background:#fff;cursor:pointer;line-height:1}
+.view-tabs{display:none;gap:8px;justify-content:center}.view-tabs.show{display:flex}.tab-btn{flex:1;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;font-weight:700;font-size:14px;cursor:pointer;transition:.2s}.tab-btn.active{background:#fff;color:var(--ink);border-color:#fff}
+.lightbox-stage{position:relative;width:100%;border-radius:14px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center}
+.lightbox img#lightbox-img{width:100%;max-height:62vh;object-fit:contain;display:block}
+.viewer-3d{display:none;width:100%;aspect-ratio:1;max-height:62vh;position:relative;background:#fff;touch-action:pan-y;cursor:grab;user-select:none}.viewer-3d.active{display:block}.viewer-3d:active{cursor:grabbing}
+.viewer-3d canvas{width:100%;height:100%;display:block;object-fit:contain}
+.spin-hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(31,26,24,.78);color:#fff;font-size:12px;font-weight:700;padding:5px 14px;border-radius:999px;pointer-events:none;white-space:nowrap}
+.spin-nav{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.92);color:var(--ink);font-size:18px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12)}.spin-nav.prev{right:10px}.spin-nav.next{left:10px}
+
 @media(max-width:760px){.hero{grid-template-columns:1fr;gap:26px;padding-block:34px}.hero-img{max-height:420px}.steps{grid-template-columns:1fr}.contact-inner{align-items:flex-start;flex-direction:column}.wrap{padding-inline:16px}.sections,.how{padding-block:38px}}
 @media(max-width:390px){.product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.head .order{padding-inline:14px;font-size:13px}.logo{height:48px;max-width:140px}}
 </style>
@@ -39,12 +50,31 @@ header{background:#fff;border-bottom:1px solid var(--line)}.head{min-height:82px
 <section class="contact"><div class="wrap contact-inner"><div><h2>تواصل معنا</h2><p>واتساب: <span dir="ltr">+962785616124</span></p><p>إنستغرام: <span dir="ltr">@alsindbad_1</span></p><p>الموقع: عمّان، صويلح، شارع الأميرة هيا</p><p>السبت إلى الخميس: من 11 صباحاً حتى 10 مساءً</p><p>الجمعة: من 4 مساءً حتى 10 مساءً</p></div>
  <div class="contact-links"><a href="https://wa.me/962785616124?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D8%A7%D9%84%D8%B3%D9%86%D8%AF%D8%A8%D8%A7%D8%AF%D8%8C%20%D8%A8%D8%AF%D9%8A%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D9%85%D9%86%D8%AA%D8%AC%D8%A7%D8%AA%D9%83%D9%85" target="_blank" rel="noopener">اطلب عبر واتساب</a><a href="https://www.instagram.com/alsindbad_1/" target="_blank" rel="noopener">تابعنا على إنستغرام</a><a href="https://maps.app.goo.gl/i2CbFxRn71bDd6wQ6" target="_blank" rel="noopener">كيف توصلنا</a></div></div></section>
 </main><footer>© السندباد للأحذية والشنط</footer>
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="عرض صورة المنتج"><div class="lightbox-inner"><div class="lightbox-top"><strong id="lightbox-name"></strong><button class="close" type="button" aria-label="إغلاق">×</button></div><img id="lightbox-img" alt=""><a id="lightbox-order" class="order" target="_blank" rel="noopener">اطلب عبر واتساب</a></div></div>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="عرض صورة المنتج">
+  <div class="lightbox-inner">
+    <div class="lightbox-top"><strong id="lightbox-name"></strong><button class="close" type="button" aria-label="إغلاق">×</button></div>
+    <div class="view-tabs" id="view-tabs">
+      <button type="button" class="tab-btn active" id="tab-colors">صورة الألوان</button>
+      <button type="button" class="tab-btn" id="tab-3d">عرض 3D (360°)</button>
+    </div>
+    <div class="lightbox-stage">
+      <img id="lightbox-img" alt="">
+      <div class="viewer-3d" id="viewer-3d">
+        <canvas id="canvas-3d"></canvas>
+        <button type="button" class="spin-nav prev" id="spin-prev" aria-label="السابق">❮</button>
+        <button type="button" class="spin-nav next" id="spin-next" aria-label="التالي">❯</button>
+        <span class="spin-hint">اسحب يمين وشمال للتدوير 360°</span>
+      </div>
+    </div>
+    <a id="lightbox-order" class="order" target="_blank" rel="noopener">اطلب عبر واتساب</a>
+  </div>
+</div>
 
 <script>
 const PRODUCTS = `
 winter | 73e7e348f7f8742cc930d0cb4af87860.jpg | بوط شتوي بدون كعب بإبزيم عريض
-winter | e89185740371a6edf6b5767fa298ea95.jpg | بوط شتوي بدون كعب بشعار B
+winter | e89185740371a6edf6b5767fa298ea95.jpg, 175010.jpg | بوط شتوي بدون كعب بشعار B
 winter | 9b51766b5f4a6145811a93eb51d28444.jpg | بوط شتوي كعب متوسط بحزام رفيع
 winter | b94b2bb2a2952f385d84c281c5c2945d.jpg | بوط شتوي كعب متوسط برباط
 winter | 9782310bb53f080909802b8684a2ff19.jpg | بوط شتوي كعب متوسط بسحاب جانبي
@@ -91,8 +121,9 @@ const SECTIONS = [
 ];
 
 const items = PRODUCTS.trim().split('\n').map(line => line.trim()).filter(Boolean).map(line => {
-  const [cat, img, ...nameParts] = line.split('|').map(s => s.trim());
-  return { cat, img, name: nameParts.join(' | ') };
+  const [cat, imgsStr, ...nameParts] = line.split('|').map(s => s.trim());
+  const imgs = imgsStr.split(',').map(s => s.trim()).filter(Boolean);
+  return { cat, img: imgs[0], spinImg: imgs[1] || '', name: nameParts.join(' | ') };
 });
 
 const catalog = document.getElementById('catalog');
@@ -116,8 +147,10 @@ SECTIONS.forEach(sec => {
     const waUrl = 'https://wa.me/962785616124?text=' + encodeURIComponent('مرحبا السندباد، بدي أستفسر عن: ' + item.name + '\n' + imgFullUrl);
     const article = document.createElement('article');
     article.className = 'product';
+    const badge = item.spinImg ? '<span class="badge-3d">3D 360°</span>' : '';
+    const spinAttr = item.spinImg ? `data-spin="assets/${item.spinImg}"` : '';
     article.innerHTML = `
-      <button class="photo" type="button" data-full="assets/${item.img}" data-name="${item.name}" aria-label="تكبير صورة ${item.name}"><img src="assets/${item.img}" alt="${item.name}" loading="lazy"></button>
+      <button class="photo" type="button" data-full="assets/${item.img}" ${spinAttr} data-name="${item.name}" aria-label="تكبير صورة ${item.name}">${badge}<img src="assets/${item.img}" alt="${item.name}" loading="lazy"></button>
       <div class="product-info"><h3>${item.name}</h3><a class="order small" href="${waUrl}" target="_blank" rel="noopener">اطلب عبر واتساب</a></div>
     `;
     grid.appendChild(article);
@@ -125,13 +158,101 @@ SECTIONS.forEach(sec => {
   catalog.appendChild(grid);
 });
 
-const box = document.getElementById('lightbox'), big = document.getElementById('lightbox-img'), title = document.getElementById('lightbox-name'), order = document.getElementById('lightbox-order');
+const box = document.getElementById('lightbox'),
+      big = document.getElementById('lightbox-img'),
+      title = document.getElementById('lightbox-name'),
+      order = document.getElementById('lightbox-order'),
+      tabs = document.getElementById('view-tabs'),
+      tabColors = document.getElementById('tab-colors'),
+      tab3d = document.getElementById('tab-3d'),
+      viewer3d = document.getElementById('viewer-3d'),
+      canvas = document.getElementById('canvas-3d'),
+      ctx = canvas.getContext('2d');
+
+let spriteImg = null, frameIdx = 0, dragging = false, startX = 0;
+
+function drawFrame(idx) {
+  if (!spriteImg || !spriteImg.complete || !spriteImg.naturalWidth) return;
+  const cols = 3, rows = 3;
+  const fw = spriteImg.naturalWidth / cols;
+  const fh = spriteImg.naturalHeight / rows;
+  const col = idx % cols;
+  const row = Math.floor(idx / cols);
+  canvas.width = fw;
+  canvas.height = fh;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, fw, fh);
+  ctx.drawImage(spriteImg, col * fw, row * fh, fw, fh, 0, 0, fw, fh);
+}
+
+function showColorsMode() {
+  tabColors.classList.add('active');
+  tab3d.classList.remove('active');
+  big.style.display = 'block';
+  viewer3d.classList.remove('active');
+}
+
+function show3dMode() {
+  tab3d.classList.add('active');
+  tabColors.classList.remove('active');
+  big.style.display = 'none';
+  viewer3d.classList.add('active');
+  drawFrame(frameIdx);
+}
+
+tabColors.addEventListener('click', showColorsMode);
+tab3d.addEventListener('click', show3dMode);
+
+document.getElementById('spin-prev').addEventListener('click', e => {
+  e.stopPropagation();
+  frameIdx = (frameIdx + 8) % 9;
+  drawFrame(frameIdx);
+});
+document.getElementById('spin-next').addEventListener('click', e => {
+  e.stopPropagation();
+  frameIdx = (frameIdx + 1) % 9;
+  drawFrame(frameIdx);
+});
+
+viewer3d.addEventListener('pointerdown', e => {
+  if (e.target.closest('.spin-nav')) return;
+  dragging = true;
+  startX = e.clientX;
+  viewer3d.setPointerCapture(e.pointerId);
+});
+viewer3d.addEventListener('pointermove', e => {
+  if (!dragging) return;
+  const dx = e.clientX - startX;
+  if (Math.abs(dx) >= 24) {
+    const step = dx > 0 ? 1 : -1;
+    frameIdx = (frameIdx + step + 9) % 9;
+    drawFrame(frameIdx);
+    startX = e.clientX;
+  }
+});
+viewer3d.addEventListener('pointerup', () => { dragging = false; });
+viewer3d.addEventListener('pointercancel', () => { dragging = false; });
+
 document.querySelectorAll('.photo').forEach(btn => btn.addEventListener('click', () => {
-  const src = btn.dataset.full, name = btn.dataset.name;
+  const src = btn.dataset.full, spin = btn.dataset.spin, name = btn.dataset.name;
   big.src = src; big.alt = name; title.textContent = name;
   order.href = 'https://wa.me/962785616124?text=' + encodeURIComponent('مرحبا السندباد، بدي أستفسر عن: ' + name + '\n' + window.location.origin + '/' + src);
+
+  showColorsMode();
+  if (spin) {
+    tabs.classList.add('show');
+    frameIdx = 0;
+    spriteImg = new Image();
+    spriteImg.onload = () => { if (viewer3d.classList.contains('active')) drawFrame(frameIdx); };
+    spriteImg.src = spin;
+  } else {
+    tabs.classList.remove('show');
+    spriteImg = null;
+  }
+
   box.classList.add('open'); document.body.style.overflow = 'hidden';
 }));
+
 function closeBox() { box.classList.remove('open'); document.body.style.overflow = ''; big.src = ''; }
 box.querySelector('.close').addEventListener('click', closeBox);
 box.addEventListener('click', e => { if (e.target === box) closeBox(); });
