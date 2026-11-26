@@ -4,54 +4,489 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#B3201F">
-<meta name="description" content="السندباد للأحذية والشنط — تسوق البوط الشتوي وبواط الكعب والبوابيج الطبية والشنط والأحذية النسائية والولادي والبناتي في الأردن واطلب مباشرة عبر واتساب.">
+<meta name="description" content="السندباد للأحذية والشنط — تسوق البوط الشتوي والأحذية والشنط في الأردن واطلب مباشرة عبر واتساب.">
 <title>السندباد للأحذية والشنط | الأردن</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root{--red:#B3201F;--ink:#1F1A18;--muted:#655b56;--cream:#FBF7F4;--line:#E8DCD3;--soft:#F1E4DB}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--ink);font-family:'Cairo',system-ui,sans-serif;line-height:1.65}a{text-decoration:none}button{font:inherit}
-.wrap{width:min(1200px,100%);margin:auto;padding-inline:24px}
-header{background:#fff;border-bottom:1px solid var(--line)}.head{min-height:82px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}.logo{height:56px;max-width:180px;object-fit:contain}
-.order{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:9px 24px;border-radius:999px;background:var(--red);color:#fff;font-weight:700;transition:.2s}.order:hover{filter:brightness(.92);transform:translateY(-1px)}
-.hero{display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:42px;padding-block:54px}.eyebrow{color:var(--red);font-weight:700;font-size:14px}h1{font-size:clamp(34px,5vw,52px);line-height:1.25;margin:12px 0 18px;font-weight:800}.intro{font-size:18px;color:var(--muted);max-width:540px;margin:0}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}.secondary{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:8px 24px;border:2px solid var(--ink);border-radius:999px;color:var(--ink);font-weight:700}.hero-img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:28px;display:block}
-.products-area{background:#fff;border-block:1px solid var(--line)}.sections{padding-block:52px}.section-head{margin:0 0 22px}h2{font-size:clamp(27px,4vw,34px);margin:0;font-weight:800}.section-head p{color:var(--muted);margin:5px 0 0}.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));gap:16px}.product{display:flex;flex-direction:column;min-width:0;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:var(--cream)}.photo{position:relative;display:block;width:100%;padding:0;border:0;background:transparent;cursor:zoom-in}.photo img{width:100%;aspect-ratio:1;object-fit:cover;display:block;transition:transform .25s}.photo:hover img{transform:scale(1.025)}
-.product-info{display:flex;flex:1;flex-direction:column;gap:12px;padding:12px}.product h3{font-size:15px;line-height:1.5;margin:0;flex:1;font-weight:700}.small{background:var(--ink);font-size:14px;min-height:42px;padding:7px 12px}.subsection{margin-top:42px}.how{padding-block:52px}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}.step{background:var(--soft);padding:22px;border-radius:18px}.step b{display:block;font-size:28px;color:var(--red);line-height:1.2}.step strong{display:block;font-size:19px;margin-top:8px}.step p{margin:4px 0 0;color:var(--muted);font-size:14px}
-.contact{background:var(--red);color:white}.contact-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-block:42px}.contact h2{margin-bottom:8px}.contact p{margin:3px 0}.contact-links{display:flex;flex-wrap:wrap;gap:10px}.contact-links a{display:inline-flex;align-items:center;justify-content:center;padding:9px 18px;min-height:44px;border:1px solid #fff;border-radius:999px;color:#fff;font-weight:700}.contact-links a:first-child{background:#fff;color:#8E1816}footer{padding:16px;text-align:center;font-size:13px;color:var(--muted)}
 
-.lightbox{position:fixed;inset:0;background:#140e0ee8;z-index:10;display:none;align-items:center;justify-content:center;padding:16px}.lightbox.open{display:flex}.lightbox-inner{width:min(540px,100%);display:flex;flex-direction:column;gap:12px}.lightbox-top{display:flex;align-items:center;justify-content:space-between;color:#fff;gap:12px}.close{width:44px;height:44px;border:0;border-radius:50%;font-size:26px;background:#fff;cursor:pointer;line-height:1}
-.lightbox-stage{position:relative;width:100%;border-radius:14px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;min-height:300px}
-.lightbox-stage > img{width:100%;max-height:65vh;object-fit:contain;display:block;user-select:none}
-.gallery-thumbs{display:none;gap:9px;justify-content:center;overflow-x:auto;padding:2px 0 5px}.gallery-thumbs.show{display:flex}.gallery-thumb{width:64px;height:64px;flex:0 0 64px;border:2px solid transparent;border-radius:10px;padding:2px;background:#fff;overflow:hidden;cursor:pointer}.gallery-thumb.active{border-color:var(--red)}.gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-@media(max-width:760px){.hero{grid-template-columns:1fr;gap:26px;padding-block:34px}.hero-img{max-height:420px}.steps{grid-template-columns:1fr}.contact-inner{align-items:flex-start;flex-direction:column}.wrap{padding-inline:16px}.sections,.how{padding-block:38px}}
-@media(max-width:390px){.product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.head .order{padding-inline:14px;font-size:13px}.logo{height:48px;max-width:140px}}
+<style>
+:root{
+  --red:#B3201F;
+  --ink:#1F1A18;
+  --muted:#655b56;
+  --cream:#FBF7F4;
+  --line:#E8DCD3;
+  --soft:#F1E4DB;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'Cairo',system-ui,sans-serif;
+  line-height:1.65;
+}
+a{text-decoration:none}
+button{font:inherit}
+.wrap{
+  width:min(1200px,100%);
+  margin:auto;
+  padding-inline:24px;
+}
+
+header{
+  background:#fff;
+  border-bottom:1px solid var(--line);
+}
+.head{
+  min-height:82px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding-block:12px;
+}
+.logo{
+  height:56px;
+  max-width:180px;
+  object-fit:contain;
+}
+.order{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:46px;
+  padding:9px 24px;
+  border-radius:999px;
+  background:var(--red);
+  color:#fff;
+  font-weight:700;
+  transition:.2s;
+}
+.order:hover{
+  filter:brightness(.92);
+  transform:translateY(-1px);
+}
+
+.hero{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  align-items:center;
+  gap:42px;
+  padding-block:54px;
+}
+.eyebrow{
+  color:var(--red);
+  font-weight:700;
+  font-size:14px;
+}
+h1{
+  font-size:clamp(34px,5vw,52px);
+  line-height:1.25;
+  margin:12px 0 18px;
+  font-weight:800;
+}
+.intro{
+  font-size:18px;
+  color:var(--muted);
+  max-width:540px;
+  margin:0;
+}
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:24px;
+}
+.secondary{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:46px;
+  padding:8px 24px;
+  border:2px solid var(--ink);
+  border-radius:999px;
+  color:var(--ink);
+  font-weight:700;
+}
+.hero-img{
+  width:100%;
+  aspect-ratio:1;
+  object-fit:cover;
+  border-radius:28px;
+  display:block;
+}
+
+/* إعلان التوصيل */
+.delivery-banner{
+  background:#fff;
+  border:1px solid var(--line);
+  border-right:5px solid var(--red);
+  border-radius:14px;
+  padding:18px 20px;
+  margin:0 auto 30px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  text-align:center;
+  flex-wrap:wrap;
+}
+.delivery-banner strong{
+  color:var(--red);
+  font-size:19px;
+}
+.delivery-banner span{
+  color:var(--muted);
+  font-size:15px;
+}
+
+.products-area{
+  background:#fff;
+  border-block:1px solid var(--line);
+}
+.sections{padding-block:52px}
+.section-head{margin:0 0 22px}
+h2{
+  font-size:clamp(27px,4vw,34px);
+  margin:0;
+  font-weight:800;
+}
+.section-head p{
+  color:var(--muted);
+  margin:5px 0 0;
+}
+.product-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));
+  gap:16px;
+}
+.product{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:var(--cream);
+}
+.photo{
+  position:relative;
+  display:block;
+  width:100%;
+  padding:0;
+  border:0;
+  background:transparent;
+  cursor:zoom-in;
+}
+.photo img{
+  width:100%;
+  aspect-ratio:1;
+  object-fit:cover;
+  display:block;
+  transition:transform .25s;
+}
+.photo:hover img{transform:scale(1.025)}
+.product-info{
+  display:flex;
+  flex:1;
+  flex-direction:column;
+  gap:12px;
+  padding:12px;
+}
+.product h3{
+  font-size:15px;
+  line-height:1.5;
+  margin:0;
+  flex:1;
+  font-weight:700;
+}
+.small{
+  background:var(--ink);
+  font-size:14px;
+  min-height:42px;
+  padding:7px 12px;
+}
+.subsection{margin-top:42px}
+
+.how{padding-block:52px}
+.steps{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  margin-top:22px;
+}
+.step{
+  background:var(--soft);
+  padding:22px;
+  border-radius:18px;
+}
+.step b{
+  display:block;
+  font-size:28px;
+  color:var(--red);
+  line-height:1.2;
+}
+.step strong{
+  display:block;
+  font-size:19px;
+  margin-top:8px;
+}
+.step p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.contact{
+  background:var(--red);
+  color:white;
+}
+.contact-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  padding-block:42px;
+}
+.contact h2{margin-bottom:8px}
+.contact p{margin:3px 0}
+.contact-links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.contact-links a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:9px 18px;
+  min-height:44px;
+  border:1px solid #fff;
+  border-radius:999px;
+  color:#fff;
+  font-weight:700;
+}
+.contact-links a:first-child{
+  background:#fff;
+  color:#8E1816;
+}
+footer{
+  padding:16px;
+  text-align:center;
+  font-size:13px;
+  color:var(--muted);
+}
+
+/* معرض صور المنتج */
+.lightbox{
+  position:fixed;
+  inset:0;
+  background:#140e0ee8;
+  z-index:10;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+}
+.lightbox.open{display:flex}
+.lightbox-inner{
+  width:min(540px,100%);
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.lightbox-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  color:#fff;
+  gap:12px;
+}
+.close{
+  width:44px;
+  height:44px;
+  border:0;
+  border-radius:50%;
+  font-size:26px;
+  background:#fff;
+  cursor:pointer;
+  line-height:1;
+}
+.lightbox-stage{
+  width:100%;
+  border-radius:14px;
+  overflow:hidden;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:300px;
+}
+.lightbox-stage img{
+  width:100%;
+  max-height:65vh;
+  object-fit:contain;
+  display:block;
+}
+.gallery-thumbs{
+  display:flex;
+  gap:8px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.gallery-thumbs button{
+  width:62px;
+  height:62px;
+  padding:0;
+  border:2px solid transparent;
+  border-radius:8px;
+  overflow:hidden;
+  background:#fff;
+  cursor:pointer;
+}
+.gallery-thumbs button.active{border-color:var(--red)}
+.gallery-thumbs img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+@media(max-width:760px){
+  .hero{
+    grid-template-columns:1fr;
+    gap:26px;
+    padding-block:34px;
+  }
+  .hero-img{max-height:420px}
+  .steps{grid-template-columns:1fr}
+  .contact-inner{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .wrap{padding-inline:16px}
+  .sections,.how{padding-block:38px}
+}
+@media(max-width:390px){
+  .product-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+  }
+  .head .order{
+    padding-inline:14px;
+    font-size:13px;
+  }
+  .logo{
+    height:48px;
+    max-width:140px;
+  }
+}
 </style>
 </head>
-<body>
-<header><div class="wrap head"><a href="#" aria-label="السندباد - الرئيسية"><img class="logo" src="assets/ffd961e21eeced474e91cc98cc7cbd02.jpg" alt="شعار السندباد للأحذية والشنط"></a><a class="order" href="https://wa.me/962785616124?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D8%A7%D9%84%D8%B3%D9%86%D8%AF%D8%A8%D8%A7%D8%AF%D8%8C%20%D8%A8%D8%AF%D9%8A%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D9%85%D9%86%D8%AA%D8%AC%D8%A7%D8%AA%D9%83%D9%85" target="_blank" rel="noopener">اطلب عبر واتساب</a></div></header>
-<main>
-<section class="wrap hero">
- <div><span class="eyebrow">أحذية وشنط بالأردن</span><h1>خطوتك الجاية من السندباد</h1><p class="intro">بوط شتوي وبواط كعب وبوابيج طبي وشنط وأحذية نسائية وولادي وبناتي بموديلات وألوان مختلفة. اختار اللي عجبك، وابعتلنا على الواتساب، وطلبك بيوصلك.</p><div class="actions"><a class="order" href="https://wa.me/962785616124?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D8%A7%D9%84%D8%B3%D9%86%D8%AF%D8%A8%D8%A7%D8%AF%D8%8C%20%D8%A8%D8%AF%D9%8A%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D9%85%D9%86%D8%AA%D8%AC%D8%A7%D8%AA%D9%83%D9%85" target="_blank" rel="noopener">اطلب عبر واتساب</a><a class="secondary" href="#products">شوف المنتجات</a></div></div>
- <img class="hero-img" src="assets/1795654125094.jpg" alt="واجهة محل السندباد للأحذية والشنط">
-</section>
-<section class="products-area" id="products"><div class="wrap sections" id="catalog"></div></section>
-<section class="wrap how"><h2>كيف بتطلب</h2><div class="steps">
- <div class="step"><b>1</b><strong>اختار الموديل</strong><p>تصفح المنتجات هون أو على صفحتنا بالإنستغرام.</p></div>
- <div class="step"><b>2</b><strong>ابعتلنا على واتساب</strong><p>اضغط على زر الطلب وبنفتحلك محادثة معنا مباشرة.</p></div>
- <div class="step"><b>3</b><strong>استلم طلبك</strong><p>بنأكد معك المقاس واللون والتوصيل.</p></div>
-</div></section>
-<section class="contact"><div class="wrap contact-inner"><div><h2>تواصل معنا</h2><p>واتساب: <span dir="ltr">+962785616124</span></p><p>إنستغرام: <span dir="ltr">@alsindbad_1</span></p><p>الموقع: عمّان، صويلح، شارع الأميرة هيا</p><p>السبت إلى الخميس: من 11 صباحاً حتى 10 مساءً</p><p>الجمعة: من 4 مساءً حتى 10 مساءً</p></div>
- <div class="contact-links"><a href="https://wa.me/962785616124?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D8%A7%D9%84%D8%B3%D9%86%D8%AF%D8%A8%D8%A7%D8%AF%D8%8C%20%D8%A8%D8%AF%D9%8A%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D9%85%D9%86%D8%AA%D8%AC%D8%A7%D8%AA%D9%83%D9%85" target="_blank" rel="noopener">اطلب عبر واتساب</a><a href="https://www.instagram.com/alsindbad_1/" target="_blank" rel="noopener">تابعنا على إنستغرام</a><a href="https://maps.app.goo.gl/i2CbFxRn71bDd6wQ6" target="_blank" rel="noopener">كيف توصلنا</a></div></div></section>
-</main><footer>© السندباد للأحذية والشنط</footer>
 
+<body>
+
+<header>
+  <div class="wrap head">
+    <a href="#" aria-label="السندباد - الرئيسية">
+      <img class="logo" src="assets/ffd961e21eeced474e91cc98cc7cbd02.jpg" alt="شعار السندباد للأحذية والشنط">
+    </a>
+    <a class="order" href="https://wa.me/962785616124?text=مرحبا%20السندباد،%20بدي%20أستفسر%20عن%20منتجاتكم" target="_blank" rel="noopener">
+      اطلب عبر واتساب
+    </a>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap hero">
+  <div>
+    <span class="eyebrow">أحذية وشنط بالأردن</span>
+    <h1>خطوتك الجاية من السندباد</h1>
+    <p class="intro">
+      بوط شتوي وبواط كعب وبوابيج طبي وشنط وأحذية نسائية وولادي وبناتي بموديلات وألوان مختلفة. اختار اللي عجبك، وابعتلنا على الواتساب، وطلبك بيوصلك.
+    </p>
+    <div class="actions">
+      <a class="order" href="https://wa.me/962785616124?text=مرحبا%20السندباد،%20بدي%20أستفسر%20عن%20منتجاتكم" target="_blank" rel="noopener">اطلب عبر واتساب</a>
+      <a class="secondary" href="#products">شوف المنتجات</a>
+    </div>
+  </div>
+  <img class="hero-img" src="assets/1795654125094.jpg" alt="واجهة محل السندباد للأحذية والشنط">
+</section>
+
+<!-- التوصيل -->
+<section class="wrap">
+  <div class="delivery-banner">
+    <span>🚚</span>
+    <strong>التوصيل دينارين فقط</strong>
+    <span>لجميع مناطق المملكة الأردنية</span>
+  </div>
+</section>
+
+<section class="products-area" id="products">
+  <div class="wrap sections" id="catalog"></div>
+</section>
+
+<section class="wrap how">
+  <h2>كيف بتطلب</h2>
+  <div class="steps">
+    <div class="step">
+      <b>1</b>
+      <strong>اختار الموديل</strong>
+      <p>تصفح المنتجات هون أو على صفحتنا بالإنستغرام.</p>
+    </div>
+    <div class="step">
+      <b>2</b>
+      <strong>ابعتلنا على واتساب</strong>
+      <p>اضغط على زر الطلب وبنفتحلك محادثة معنا مباشرة.</p>
+    </div>
+    <div class="step">
+      <b>3</b>
+      <strong>استلم طلبك</strong>
+      <p>بنأكد معك المقاس واللون والتوصيل.</p>
+    </div>
+  </div>
+</section>
+
+<section class="contact">
+  <div class="wrap contact-inner">
+    <div>
+      <h2>تواصل معنا</h2>
+      <p>واتساب: <span dir="ltr">+962785616124</span></p>
+      <p>إنستغرام: <span dir="ltr">@alsindbad_1</span></p>
+      <p>الموقع: عمّان، صويلح، شارع الأميرة هيا</p>
+      <p>السبت إلى الخميس: من 11 صباحاً حتى 10 مساءً</p>
+      <p>الجمعة: من 4 مساءً حتى 10 مساءً</p>
+    </div>
+    <div class="contact-links">
+      <a href="https://wa.me/962785616124?text=مرحبا%20السندباد،%20بدي%20أستفسر%20عن%20منتجاتكم" target="_blank" rel="noopener">اطلب عبر واتساب</a>
+      <a href="https://www.instagram.com/alsindbad_1/" target="_blank" rel="noopener">تابعنا على إنستغرام</a>
+      <a href="https://maps.app.goo.gl/i2CbFxRn71bDd6wQ6" target="_blank" rel="noopener">كيف توصلنا</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>© السندباد للأحذية والشنط</footer>
+
+<!-- نافذة عرض صور المنتجات -->
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="عرض صورة المنتج">
   <div class="lightbox-inner">
-    <div class="lightbox-top"><strong id="lightbox-name"></strong><button class="close" type="button" aria-label="إغلاق">×</button></div>
+    <div class="lightbox-top">
+      <strong id="lightbox-name"></strong>
+      <button class="close" type="button" aria-label="إغلاق">×</button>
+    </div>
+
     <div class="lightbox-stage">
       <img id="lightbox-img" alt="">
     </div>
-    <div class="gallery-thumbs" id="gallery-thumbs" aria-label="صور إضافية للمنتج"></div>
+
+    <div class="gallery-thumbs" id="gallery-thumbs"></div>
+
     <a id="lightbox-order" class="order" target="_blank" rel="noopener">اطلب عبر واتساب</a>
   </div>
 </div>
@@ -94,29 +529,37 @@ slippers | 99f735cef13adbc4df1fa829261494f4.jpg | بابوج طبي بني بن�
 `;
 
 const SECTIONS = [
-  { id: 'winter', title: 'البوط الشتوي', desc: 'كل الموديلات بمقاسات 36 إلى 41. اضغط على الصورة وابعتلنا على واتساب، وحدد اللون والمقاس.' },
-  { id: 'heels', title: 'بواط كعب', desc: 'كل الموديلات بمقاسات 36 إلى 41. اضغط على الصورة وابعتلنا على واتساب، وحدد اللون والمقاس.' },
-  { id: 'tall', title: 'بوط طويل', desc: 'اضغط على الصورة وابعتلنا على واتساب، وحدد اللون والمقاس.' },
-  { id: 'slippers', title: 'بوابيج طبي', desc: 'بمقاسات 36 إلى 41. اضغط على الصورة وابعتلنا على واتساب، وحدد اللون والمقاس.' },
-  { id: 'bags', title: 'الشنط', desc: 'تشكيلة شنط متنوعة. اضغط على الصورة وابعتلنا على واتساب، وحدد اللون المطلوب.' },
-  { id: 'boys', title: 'ولادي', desc: 'تشكيلة أحذية ولادي متنوعة. اضغط على الصورة وابعتلنا على واتساب، وحدد اللون والمقاس.' },
-  { id: 'girls', title: 'بناتي', desc: 'تشكيلة أحذية بناتي متنوعة. اضغط على الصورة وابعتلنا على واتساب، وحدد اللون والمقاس.' },
-  { id: 'women_heels', title: 'أحذية نسائي كعب', desc: 'موديلات كعب نسائية متنوعة. اضغط على الصورة وابعتلنا على واتساب، وحدد اللون والمقاس.' },
-  { id: 'women_shoes', title: 'أحذية نسائي', desc: 'تشكيلة أحذية نسائية متنوعة. اضغط على الصورة وابعتلنا على واتساب، وحدد اللون والمقاس.' }
+  {id:'winter',title:'البوط الشتوي',desc:'كل الموديلات بمقاسات 36 إلى 41. اضغط على الصورة وابعتلنا على واتساب، وحدد اللون والمقاس.'},
+  {id:'heels',title:'بواط كعب',desc:'كل الموديلات بمقاسات 36 إلى 41. اضغط على الصورة وابعتلنا على واتساب، وحدد اللون والمقاس.'},
+  {id:'tall',title:'بوط طويل',desc:'اضغط على الصورة وابعتلنا على واتساب، وحدد اللون والمقاس.'},
+  {id:'slippers',title:'بوابيج طبي',desc:'بمقاسات 36 إلى 41. اضغط على الصورة وابعتلنا على واتساب، وحدد اللون والمقاس.'},
+  {id:'bags',title:'الشنط',desc:'تشكيلة شنط متنوعة. اضغط على الصورة وابعتلنا على واتساب، وحدد اللون المطلوب.'},
+  {id:'boys',title:'ولادي',desc:'تشكيلة أحذية ولادي متنوعة. اضغط على الصورة وابعتلنا على واتساب، وحدد اللون والمقاس.'},
+  {id:'girls',title:'بناتي',desc:'تشكيلة أحذية بناتي متنوعة. اضغط على الصورة وابعتلنا على واتساب، وحدد اللون والمقاس.'},
+  {id:'women_heels',title:'أحذية نسائي كعب',desc:'موديلات كعب نسائية متنوعة. اضغط على الصورة وابعتلنا على واتساب، وحدد اللون والمقاس.'},
+  {id:'women_shoes',title:'أحذية نسائي',desc:'تشكيلة أحذية نسائية متنوعة. اضغط على الصورة وابعتلنا على واتساب، وحدد اللون والمقاس.'}
 ];
 
-const items = PRODUCTS.trim().split('\n').map(line => line.trim()).filter(Boolean).map(line => {
-  const [cat, imgsStr, ...nameParts] = line.split('|').map(s => s.trim());
-  const imgs = imgsStr.split(',').map(s => s.trim()).filter(Boolean);
-  return { cat, img: imgs[0], extraImgs: imgs.slice(1), name: nameParts.join(' | ') };
-});
+const items = PRODUCTS.trim().split('\n')
+  .map(line => line.trim())
+  .filter(Boolean)
+  .map(line => {
+    const [cat,imgsStr,...nameParts] = line.split('|').map(s=>s.trim());
+    const imgs = imgsStr.split(',').map(s=>s.trim()).filter(Boolean);
+    return {
+      cat,
+      img:imgs[0],
+      images:imgs,
+      name:nameParts.join(' | ')
+    };
+  });
 
 const catalog = document.getElementById('catalog');
 let isFirstSection = true;
 
 SECTIONS.forEach(sec => {
-  const secItems = items.filter(i => i.cat === sec.id);
-  if (!secItems.length) return;
+  const secItems = items.filter(i=>i.cat===sec.id);
+  if(!secItems.length) return;
 
   const head = document.createElement('div');
   head.className = isFirstSection ? 'section-head' : 'section-head subsection';
@@ -127,76 +570,94 @@ SECTIONS.forEach(sec => {
 
   const grid = document.createElement('div');
   grid.className = 'product-grid';
+
   secItems.forEach(item => {
     const imgFullUrl = window.location.origin + '/assets/' + item.img;
-    const waUrl = 'https://wa.me/962785616124?text=' + encodeURIComponent('مرحبا السندباد، بدي أستفسر عن: ' + item.name + '\n' + imgFullUrl);
+    const waUrl = 'https://wa.me/962785616124?text=' +
+      encodeURIComponent('مرحبا السندباد، بدي أستفسر عن: '+item.name+'\n'+imgFullUrl);
+
     const article = document.createElement('article');
     article.className = 'product';
-    const productImages = [item.img, ...item.extraImgs];
-    const imagesAttr = encodeURIComponent(JSON.stringify(productImages));
+
     article.innerHTML = `
-      <button class="photo" type="button" data-full="assets/${item.img}" data-images="${imagesAttr}" data-name="${item.name}" aria-label="عرض صور ${item.name}"><img src="assets/${item.img}" alt="${item.name}" loading="lazy"></button>
-      <div class="product-info"><h3>${item.name}</h3><a class="order small" href="${waUrl}" target="_blank" rel="noopener">اطلب عبر واتساب</a></div>
+      <button class="photo" type="button"
+        data-images="${item.images.join(',')}"
+        data-name="${item.name}"
+        aria-label="عرض صور ${item.name}">
+        <img src="assets/${item.img}" alt="${item.name}" loading="lazy">
+      </button>
+      <div class="product-info">
+        <h3>${item.name}</h3>
+        <a class="order small" href="${waUrl}" target="_blank" rel="noopener">اطلب عبر واتساب</a>
+      </div>
     `;
     grid.appendChild(article);
   });
+
   catalog.appendChild(grid);
 });
 
+/* معرض الصور */
 const box = document.getElementById('lightbox');
 const big = document.getElementById('lightbox-img');
 const title = document.getElementById('lightbox-name');
 const order = document.getElementById('lightbox-order');
 const thumbs = document.getElementById('gallery-thumbs');
-let currentImages = [];
 
-function showGalleryImage(index) {
-  if (!currentImages.length) return;
-  const safeIndex = Math.max(0, Math.min(index, currentImages.length - 1));
-  big.src = 'assets/' + currentImages[safeIndex];
-  big.alt = title.textContent;
-  thumbs.querySelectorAll('.gallery-thumb').forEach((thumb, i) => {
-    thumb.classList.toggle('active', i === safeIndex);
+document.querySelectorAll('.photo').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const images = btn.dataset.images.split(',').filter(Boolean);
+    const name = btn.dataset.name;
+
+    title.textContent = name;
+    thumbs.innerHTML = '';
+
+    function showImage(src,selectedButton){
+      big.src = 'assets/' + src;
+      big.alt = name;
+
+      thumbs.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+      if(selectedButton) selectedButton.classList.add('active');
+    }
+
+    images.forEach((src,index)=>{
+      const thumb = document.createElement('button');
+      thumb.type = 'button';
+      thumb.setAttribute('aria-label','عرض الصورة '+(index+1));
+
+      const image = document.createElement('img');
+      image.src = 'assets/' + src;
+      image.alt = name + ' - صورة ' + (index+1);
+
+      thumb.appendChild(image);
+      thumb.addEventListener('click',()=>showImage(src,thumb));
+      thumbs.appendChild(thumb);
+
+      if(index===0) showImage(src,thumb);
+    });
+
+    order.href = 'https://wa.me/962785616124?text=' +
+      encodeURIComponent('مرحبا السندباد، بدي أستفسر عن: '+name+'\n'+window.location.origin+'/assets/'+images[0]);
+
+    box.classList.add('open');
+    document.body.style.overflow = 'hidden';
   });
-}
+});
 
-document.querySelectorAll('.photo').forEach(btn => btn.addEventListener('click', () => {
-  const name = btn.dataset.name;
-  currentImages = JSON.parse(decodeURIComponent(btn.dataset.images || '%5B%5D'));
-  title.textContent = name;
-  order.href = 'https://wa.me/962785616124?text=' + encodeURIComponent('مرحبا السندباد، بدي أستفسر عن: ' + name + '\n' + window.location.origin + '/assets/' + currentImages[0]);
-
-  thumbs.innerHTML = '';
-  currentImages.forEach((imageName, index) => {
-    const thumb = document.createElement('button');
-    thumb.type = 'button';
-    thumb.className = 'gallery-thumb' + (index === 0 ? ' active' : '');
-    thumb.setAttribute('aria-label', 'عرض الصورة ' + (index + 1));
-    const image = document.createElement('img');
-    image.src = 'assets/' + imageName;
-    image.alt = name + ' - صورة ' + (index + 1);
-    thumb.appendChild(image);
-    thumb.addEventListener('click', () => showGalleryImage(index));
-    thumbs.appendChild(thumb);
-  });
-
-  thumbs.classList.toggle('show', currentImages.length > 1);
-  showGalleryImage(0);
-  box.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}));
-
-function closeBox() {
+function closeBox(){
   box.classList.remove('open');
   document.body.style.overflow = '';
   big.src = '';
-  thumbs.innerHTML = '';
-  thumbs.classList.remove('show');
-  currentImages = [];
 }
-box.querySelector('.close').addEventListener('click', closeBox);
-box.addEventListener('click', e => { if (e.target === box) closeBox(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBox(); });
+
+box.querySelector('.close').addEventListener('click',closeBox);
+box.addEventListener('click',e=>{
+  if(e.target===box) closeBox();
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') closeBox();
+});
 </script>
+
 </body>
 </html>
