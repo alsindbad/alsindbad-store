@@ -25,10 +25,11 @@ header{background:#fff;border-bottom:1px solid var(--line)}.head{min-height:82px
 .view-tabs{display:none;gap:8px;justify-content:center}.view-tabs.show{display:flex}.tab-btn{flex:1;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;font-weight:700;font-size:14px;cursor:pointer;transition:.2s}.tab-btn.active{background:#fff;color:var(--ink);border-color:#fff}
 .lightbox-stage{position:relative;width:100%;border-radius:14px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;min-height:300px}
 .lightbox-stage > img{width:100%;max-height:65vh;object-fit:contain;display:block;user-select:none}
-.spin-wrap{display:none;width:100%;aspect-ratio:1;max-height:65vh;position:relative;background:#fff;touch-action:none;cursor:grab;user-select:none;overflow:hidden}.spin-wrap.active{display:block}.spin-wrap:active{cursor:grabbing}
-.spin-motion{width:100%;height:100%;background-repeat:no-repeat;background-size:300% 300%;background-color:#fff;transform-origin:center;transition:transform .08s linear,background-position .22s cubic-bezier(.22,1,.36,1);will-change:transform,background-position}
+.spin-wrap{display:none;width:100%;aspect-ratio:1;max-height:65vh;position:relative;background:#fff;touch-action:none;cursor:grab;user-select:none;overflow:hidden;perspective:900px}.spin-wrap.active{display:flex;align-items:center;justify-content:center}.spin-wrap:active{cursor:grabbing}
+.spin-card{width:92%;height:92%;display:flex;align-items:center;justify-content:center;transform-style:preserve-3d;transition:transform .25s cubic-bezier(.22,1,.36,1);will-change:transform}
+.spin-wrap.dragging .spin-card{transition:none}
+.spin-card img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;border-radius:12px;box-shadow:0 16px 32px rgba(31,26,24,.12)}
 .spin-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(31,26,24,.85);color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px;pointer-events:none;white-space:nowrap;z-index:2}
-.spin-nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.94);color:var(--ink);font-size:18px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);z-index:3}.spin-nav.prev{right:10px}.spin-nav.next{left:10px}
 
 @media(max-width:760px){.hero{grid-template-columns:1fr;gap:26px;padding-block:34px}.hero-img{max-height:420px}.steps{grid-template-columns:1fr}.contact-inner{align-items:flex-start;flex-direction:column}.wrap{padding-inline:16px}.sections,.how{padding-block:38px}}
 @media(max-width:390px){.product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.head .order{padding-inline:14px;font-size:13px}.logo{height:48px;max-width:140px}}
@@ -61,10 +62,10 @@ header{background:#fff;border-bottom:1px solid var(--line)}.head{min-height:82px
     <div class="lightbox-stage">
       <img id="lightbox-img" alt="">
       <div class="spin-wrap" id="spin-wrap">
-        <div class="spin-motion" id="spin-motion"></div>
-        <button type="button" class="spin-nav prev" id="spin-prev" aria-label="السابق">❮</button>
-        <button type="button" class="spin-nav next" id="spin-next" aria-label="التالي">❯</button>
-        <span class="spin-hint" id="spin-hint">اسحب للتحريك والتدوير (1 / 9)</span>
+        <div class="spin-card" id="spin-card">
+          <img id="spin-img" alt="">
+        </div>
+        <span class="spin-hint" id="spin-hint">امسك واسحب الصورة لتحريكها 3D</span>
       </div>
     </div>
     <a id="lightbox-order" class="order" target="_blank" rel="noopener">اطلب عبر واتساب</a>
@@ -167,26 +168,18 @@ const box = document.getElementById('lightbox'),
       tabColors = document.getElementById('tab-colors'),
       tab3d = document.getElementById('tab-3d'),
       spinWrap = document.getElementById('spin-wrap'),
-      spinMotion = document.getElementById('spin-motion'),
-      spinHint = document.getElementById('spin-hint'),
-      prevBtn = document.getElementById('spin-prev'),
-      nextBtn = document.getElementById('spin-next');
+      spinCard = document.getElementById('spin-card'),
+      spinImg = document.getElementById('spin-img');
 
-let angles = [], stepIdx = 0, dragging = false, startX = 0, dragOffset = 0;
+let dragging = false, startX = 0, startY = 0, rotY = 0, rotX = 0, tx = 0, ty = 0;
 
-function applyMotionTransform() {
-  const clamped = Math.max(-28, Math.min(28, dragOffset * 0.22));
-  const tilt = Math.max(-7, Math.min(7, dragOffset * 0.06));
-  spinMotion.style.transform = `scale(1.06) translateX(${clamped}px) rotateY(${tilt}deg)`;
+function render3dCard() {
+  spinCard.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotateY(${rotY}deg) rotateX(${rotX}deg) scale(${dragging ? 1.04 : 1})`;
 }
 
-function showStep(i) {
-  if (!angles.length) return;
-  stepIdx = ((i % 9) + 9) % 9;
-  const col = stepIdx % 3;
-  const row = Math.floor(stepIdx / 3);
-  spinMotion.style.backgroundPosition = `${col * 50}% ${row * 50}%`;
-  spinHint.textContent = `اسحب للتحريك والتدوير (${stepIdx + 1} / 9)`;
+function reset3dCard() {
+  rotY = 0; rotX = 0; tx = 0; ty = 0;
+  render3dCard();
 }
 
 function showColorsMode() {
@@ -194,6 +187,9 @@ function showColorsMode() {
   tab3d.classList.remove('active');
   big.style.display = 'block';
   spinWrap.classList.remove('active');
+  dragging = false;
+  spinWrap.classList.remove('dragging');
+  reset3dCard();
 }
 
 function show3dMode() {
@@ -201,59 +197,41 @@ function show3dMode() {
   tabColors.classList.remove('active');
   big.style.display = 'none';
   spinWrap.classList.add('active');
-  dragOffset = 0;
-  applyMotionTransform();
-  showStep(stepIdx);
+  reset3dCard();
 }
 
 tabColors.addEventListener('click', showColorsMode);
 tab3d.addEventListener('click', show3dMode);
 
-prevBtn.addEventListener('click', e => {
-  e.stopPropagation();
-  dragOffset = -18;
-  applyMotionTransform();
-  showStep(stepIdx - 1);
-  setTimeout(() => { dragOffset = 0; applyMotionTransform(); }, 160);
-});
-
-nextBtn.addEventListener('click', e => {
-  e.stopPropagation();
-  dragOffset = 18;
-  applyMotionTransform();
-  showStep(stepIdx + 1);
-  setTimeout(() => { dragOffset = 0; applyMotionTransform(); }, 160);
-});
-
 spinWrap.addEventListener('pointerdown', e => {
-  if (e.target.closest('.spin-nav')) return;
   dragging = true;
+  spinWrap.classList.add('dragging');
   startX = e.clientX;
-  dragOffset = 0;
+  startY = e.clientY;
   spinWrap.setPointerCapture(e.pointerId);
+  render3dCard();
 });
 
 spinWrap.addEventListener('pointermove', e => {
   if (!dragging) return;
   const dx = e.clientX - startX;
-  dragOffset = dx;
-  applyMotionTransform();
-  if (Math.abs(dx) >= 36) {
-    showStep(stepIdx + (dx > 0 ? 1 : -1));
-    startX = e.clientX;
-    dragOffset = 0;
-  }
+  const dy = e.clientY - startY;
+  rotY = Math.max(-28, Math.min(28, dx * 0.22));
+  rotX = Math.max(-22, Math.min(22, -dy * 0.18));
+  tx = Math.max(-26, Math.min(26, dx * 0.16));
+  ty = Math.max(-20, Math.min(20, dy * 0.14));
+  render3dCard();
 });
 
-function endDrag() {
+function stopDrag() {
   if (!dragging) return;
   dragging = false;
-  dragOffset = 0;
-  applyMotionTransform();
+  spinWrap.classList.remove('dragging');
+  reset3dCard();
 }
 
-spinWrap.addEventListener('pointerup', endDrag);
-spinWrap.addEventListener('pointercancel', endDrag);
+spinWrap.addEventListener('pointerup', stopDrag);
+spinWrap.addEventListener('pointercancel', stopDrag);
 
 document.querySelectorAll('.photo').forEach(btn => btn.addEventListener('click', () => {
   const src = btn.dataset.full, extra = btn.dataset.extra, name = btn.dataset.name;
@@ -262,23 +240,19 @@ document.querySelectorAll('.photo').forEach(btn => btn.addEventListener('click',
 
   showColorsMode();
   if (extra) {
-    angles = extra.split(',').map(s => s.trim()).filter(Boolean);
-    stepIdx = 0;
-    dragOffset = 0;
+    const first3d = extra.split(',').map(s => s.trim()).filter(Boolean)[0];
+    spinImg.src = first3d || src;
+    spinImg.alt = name;
     tabs.classList.add('show');
-    spinMotion.style.backgroundImage = `url('${angles[0]}')`;
-    applyMotionTransform();
-    showStep(0);
   } else {
-    angles = [];
+    spinImg.src = '';
     tabs.classList.remove('show');
-    spinMotion.style.backgroundImage = '';
   }
 
   box.classList.add('open'); document.body.style.overflow = 'hidden';
 }));
 
-function closeBox() { box.classList.remove('open'); document.body.style.overflow = ''; big.src = ''; spinWrap.classList.remove('active'); }
+function closeBox() { box.classList.remove('open'); document.body.style.overflow = ''; big.src = ''; spinImg.src = ''; showColorsMode(); }
 box.querySelector('.close').addEventListener('click', closeBox);
 box.addEventListener('click', e => { if (e.target === box) closeBox(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBox(); });
