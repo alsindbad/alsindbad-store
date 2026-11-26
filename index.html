@@ -25,8 +25,8 @@ header{background:#fff;border-bottom:1px solid var(--line)}.head{min-height:82px
 .view-tabs{display:none;gap:8px;justify-content:center}.view-tabs.show{display:flex}.tab-btn{flex:1;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;font-weight:700;font-size:14px;cursor:pointer;transition:.2s}.tab-btn.active{background:#fff;color:var(--ink);border-color:#fff}
 .lightbox-stage{position:relative;width:100%;border-radius:14px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;min-height:300px}
 .lightbox-stage > img{width:100%;max-height:65vh;object-fit:contain;display:block;user-select:none}
-.spin-wrap{display:none;width:100%;aspect-ratio:1;max-height:65vh;position:relative;background:#fff;touch-action:none;cursor:grab;user-select:none;overflow:hidden}.spin-wrap.active{display:block}.spin-wrap:active{cursor:grabbing}
-.spin-frame{width:100%;height:100%;background-repeat:no-repeat;background-size:400% 100%;background-color:#fff;transition:background-position .16s ease}
+.spin-wrap{display:none;width:100%;aspect-ratio:1;max-height:65vh;position:relative;background:#fff;touch-action:pan-y;cursor:grab;user-select:none;overflow:hidden}.spin-wrap.active{display:flex;align-items:center;justify-content:center}.spin-wrap:active{cursor:grabbing}
+.spin-wrap img#spin-img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;transition:transform .2s ease}
 .spin-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(31,26,24,.85);color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px;pointer-events:none;white-space:nowrap;z-index:2}
 .spin-nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.94);color:var(--ink);font-size:18px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);z-index:3}.spin-nav.prev{right:10px}.spin-nav.next{left:10px}
 
@@ -61,10 +61,10 @@ header{background:#fff;border-bottom:1px solid var(--line)}.head{min-height:82px
     <div class="lightbox-stage">
       <img id="lightbox-img" alt="">
       <div class="spin-wrap" id="spin-wrap">
-        <div class="spin-frame" id="spin-frame"></div>
+        <img id="spin-img" alt="">
         <button type="button" class="spin-nav prev" id="spin-prev" aria-label="السابق">❮</button>
         <button type="button" class="spin-nav next" id="spin-next" aria-label="التالي">❯</button>
-        <span class="spin-hint" id="spin-hint">اسحب يمين وشمال للتدوير (1 / 4)</span>
+        <span class="spin-hint" id="spin-hint">اسحب أو اضغط للتقليب</span>
       </div>
     </div>
     <a id="lightbox-order" class="order" target="_blank" rel="noopener">اطلب عبر واتساب</a>
@@ -74,7 +74,7 @@ header{background:#fff;border-bottom:1px solid var(--line)}.head{min-height:82px
 <script>
 const PRODUCTS = `
 winter | 73e7e348f7f8742cc930d0cb4af87860.jpg | بوط شتوي بدون كعب بإبزيم عريض
-winter | 302849324_bota_cream_sprite.jpg | بوط شتوي بدون كعب بشعار B
+winter | e89185740371a6edf6b5767fa298ea95.jpg, 1795720178047.jpg | بوط شتوي بدون كعب بشعار B
 winter | 9b51766b5f4a6145811a93eb51d28444.jpg | بوط شتوي كعب متوسط بحزام رفيع
 winter | b94b2bb2a2952f385d84c281c5c2945d.jpg | بوط شتوي كعب متوسط برباط
 winter | 9782310bb53f080909802b8684a2ff19.jpg | بوط شتوي كعب متوسط بسحاب جانبي
@@ -167,19 +167,27 @@ const box = document.getElementById('lightbox'),
       tabColors = document.getElementById('tab-colors'),
       tab3d = document.getElementById('tab-3d'),
       spinWrap = document.getElementById('spin-wrap'),
-      spinFrame = document.getElementById('spin-frame'),
+      spinImg = document.getElementById('spin-img'),
       spinHint = document.getElementById('spin-hint'),
       prevBtn = document.getElementById('spin-prev'),
       nextBtn = document.getElementById('spin-next');
 
-let angles = [], stepIdx = 0, dragging = false, startX = 0;
+let angles = [], angleIdx = 0, dragging = false, startX = 0;
 
-function showStep(i, dir = 1) {
+function showAngle(i, dir = 1) {
   if (!angles.length) return;
-  stepIdx = ((i % 4) + 4) % 4;
-  const col = stepIdx % 4;
-  spinFrame.style.backgroundPosition = `${col * 33.3333333}% 0%`;
-  spinHint.textContent = `اسحب يمين وشمال للتدوير (${stepIdx + 1} / 4)`;
+  angleIdx = ((i % angles.length) + angles.length) % angles.length;
+  spinImg.style.transform = `translateX(${dir * 12}px)`;
+  spinImg.src = angles[angleIdx];
+  requestAnimationFrame(() => {
+    spinImg.style.transform = 'translateX(0)';
+  });
+  const hasMultiple = angles.length > 1;
+  prevBtn.style.display = hasMultiple ? 'flex' : 'none';
+  nextBtn.style.display = hasMultiple ? 'flex' : 'none';
+  spinHint.textContent = hasMultiple
+    ? `اسحب أو اضغط للانتقال (${angleIdx + 1} / ${angles.length})`
+    : 'عرض 3D';
 }
 
 function showColorsMode() {
@@ -193,21 +201,18 @@ function show3dMode() {
   tab3d.classList.add('active');
   tabColors.classList.remove('active');
   big.style.display = 'none';
-  spinWrap.classList.add('action');
-  requestAnimationFrame(() => {
-    spinWrap.classList.add('active');
-    showStep(stepIdx, 0);
-  });
+  spinWrap.classList.add('active');
+  showAngle(angleIdx, 0);
 }
 
 tabColors.addEventListener('click', showColorsMode);
 tab3d.addEventListener('click', show3dMode);
 
-prevBtn.addEventListener('click', e => { e.stopPropagation(); showStep(stepIdx - 1, -1); });
-nextBtn.addEventListener('click', e => { e.stopPropagation(); showStep(stepIdx + 1, 1); });
+prevBtn.addEventListener('click', e => { e.stopPropagation(); showAngle(angleIdx - 1, -1); });
+nextBtn.addEventListener('click', e => { e.stopPropagation(); showAngle(angleIdx + 1, 1); });
 
 spinWrap.addEventListener('pointerdown', e => {
-  if (e.target.closest('.spin-nav')) return;
+  if (e.target.closest('.spin-nav') || angles.length <= 1) return;
   dragging = true;
   startX = e.clientX;
   spinWrap.setPointerCapture(e.pointerId);
@@ -215,9 +220,9 @@ spinWrap.addEventListener('pointerdown', e => {
 spinWrap.addEventListener('pointermove', e => {
   if (!dragging) return;
   const dx = e.clientX - startX;
-  if (Math.abs(dx) >= 32) {
+  if (Math.abs(dx) >= 28) {
     const dir = dx > 0 ? 1 : -1;
-    showStep(stepIdx + dir, dir);
+    showAngle(angleIdx + dir, dir);
     startX = e.clientX;
   }
 });
@@ -232,20 +237,19 @@ document.querySelectorAll('.photo').forEach(btn => btn.addEventListener('click',
   showColorsMode();
   if (extra) {
     angles = extra.split(',').map(s => s.trim()).filter(Boolean);
-    stepIdx = 0;
+    angleIdx = 0;
     tabs.classList.add('show');
-    spinFrame.style.backgroundImage = `url('assets/${angles[0]}')`;
-    showStep(0, 0);
+    showAngle(0, 0);
   } else {
     angles = [];
     tabs.classList.remove('show');
-    spinFrame.style.backgroundImage = '';
+    spinImg.src = '';
   }
 
   box.classList.add('open'); document.body.style.overflow = 'hidden';
 }));
 
-function closeBox() { box.classList.remove('open'); document.body.style.overflow = ''; big.src = ''; spinWrap.classList.remove('active'); }
+function closeBox() { box.classList.remove('open'); document.body.style.overflow = ''; big.src = ''; spinImg.src = ''; }
 box.querySelector('.close').addEventListener('click', closeBox);
 box.addEventListener('click', e => { if (e.target === box) closeBox(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBox(); });
